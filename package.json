@@ -9,8 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "beeper": "^1.1.1",
     "beepwin": "^1.0.3",
-    "desktop-screenshot": "^0.1.1"
+    "desktop-screenshot": "^0.1.1",
+    "just-ask": "^1.1.0"
   }
 }

@@ -1,6 +1,6 @@
 const screenshot = require('desktop-screenshot');
 const fs = require('fs');
-const ask = require('./ask');
+const ask = require('just-ask');
 const beep = require("beepwin");
 
 function seconds_to_time(s) {
@@ -30,25 +30,24 @@ function pad(num, size = 5) {
     return s;
 }
 
-console.log('hey there!');
+console.log('\nHEY THERE!');
+console.log('Let`s do some screenshots, shall we?\n');
 
 function init() {
-    ask([
-        `how many screenshots you need? (now: ${count}): `,
-        `with what interval (in seconds, now: ${interval})?: `,
-        `shoule I beep? (now: ${do_beep}) (y/n): `,
-    ]).then((data) => {
-        count = parseInt(data[0]) || count;
-        interval = parseFloat(data[1]) || interval;
-        do_beep = data[2] || 'y';
-
-        console.log('');
-        console.log('COUNT:     ', count);
-        console.log('INTERVAL:  ', interval);
-        console.log('DO BEEP:   ', do_beep);
-
-        countdown(() => run())
-    });
+    ask(`how many screenshots you need? (now: ${count}): `)
+        .then((_count) => {
+            count = parseInt(_count) || count;
+            return ask(`with what interval (in seconds, now: ${interval})?: `);
+        })
+        .then((_interval) => {
+            interval = parseFloat(_interval) || interval;
+        })
+        .then(() => {
+            console.log('');
+            console.log('COUNT:     ', count);
+            console.log('INTERVAL:  ', interval);
+            countdown(() => run())
+        });
 }
 
 function countdown(cb) {
@@ -76,20 +75,29 @@ function run() {
     let timer = setInterval(() => {
         let f = output + '/' + pad(++i) + '.png';
         screenshot(f, function (error, complete) {
+
+            if (error) {
+                console.log('oh snap!');
+                process.exit(-1);
+            }
+
             if (complete) console.log("pew! -", f);
             if (i < count) {
-                if (do_beep.toLowerCase() === 'y') beep(300, 5);
+                beep(300, 5);
             } else {
                 clearInterval(timer);
-                if (do_beep.toLowerCase() === 'y') {
-                    beep(2000, 120);
-                    beep(2000, 120);
-                    beep(4000, 100);
-                    beep(4000, 100);
-                }
+
+                beep(2000, 120);
+                beep(2000, 120);
+                beep(4000, 100);
+                beep(4000, 100);
+
+
                 console.log('\nDONE!\n');
-                console.log(' - press Ctrl+C to exit');
-                ask([` - Enter to do it again`]).then(() => init());
+                console.log(` - press Ctrl+C to exit`);
+                console.log(` - Enter to do it again`);
+
+                ask(' ').then(() => init());
             }
         });
     }, interval * 1000);
