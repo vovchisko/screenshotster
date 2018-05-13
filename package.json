@@ -1,0 +1,16 @@
+{
+  "name": "screenshotster",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "beeper": "^1.1.1",
+    "beepwin": "^1.0.3",
+    "desktop-screenshot": "^0.1.1"
+  }
+}
