@@ -1,7 +1,7 @@
 const screenshot = require('desktop-screenshot');
 const fs = require('fs');
 const ask = require('just-ask');
-const beep = require("beepwin");
+const beep = (tone, interval)=>{ return false; };
 
 function seconds_to_time(s) {
     let sec_num = parseInt(s, 10); // don't forget the second param
